@@ -67,9 +67,6 @@ char errorMessage[64];
 void setup() {
 
     Serial.begin(115200);
-    while (!Serial) {
-        delay(100);
-    }
 
     Wire.begin();
 
@@ -78,7 +75,16 @@ void setup() {
     sgp41.begin(Wire);
 
     u8g2.begin();
+    u8g2.enableUTF8Print();
+     u8g2.clearBuffer();					// clear the internal memory
+    u8g2.setFont(u8g2_font_7x14B_tf);
+    //u8g2.setFont(u8g2_font_t0_11_tf);
+    u8g2.drawStr(0,12, "SGP41 VOC Sensor");
+    u8g2.drawStr(0,28, "Initializing...");
+    u8g2.sendBuffer();					// transfer internal memory to the display
+    
 
+    
     delay(1000);
 
     int32_t index_offset;
@@ -137,7 +143,7 @@ void setup() {
       */
 
   icp.setWorkPattern(icp.eNormal);
-  u8g2.enableUTF8Print();
+  
 }
 
 void loop() {
@@ -157,7 +163,7 @@ void loop() {
     u8g2.setFont(u8g2_font_7x14B_tf);
     //u8g2.setFont(u8g2_font_t0_11_tf);
     u8g2.drawStr(0,12, "SGP41 VOC Sensor");
-
+    
     // 1. Sleep: Measure every second (1Hz), as defined by the Gas Index
     // Algorithm
     //    prerequisite
